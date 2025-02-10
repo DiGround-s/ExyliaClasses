@@ -1,0 +1,7 @@
+name: ExyliaClasses
+version: '1.0-SNAPSHOT'
+main: net.diground.exyliaClasses.ExyliaClasses
+api-version: '1.18'
+authors: [ DiGround ]
+description: HCFClases PvP for new minecraft versions
+website: plugins.exylia.net/support
