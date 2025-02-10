@@ -1,0 +1,45 @@
+display-name: "<#bf660d>&lARQUERO"
+equipment:
+  helmet: "LEATHER_HELMET"
+  chestplate: "LEATHER_CHESTPLATE"
+  leggings: "LEATHER_LEGGINGS"
+  boots: "LEATHER_BOOTS"
+warmup:
+  time: "3"
+  sound:
+    enabled: true
+    type: "X"
+  particle:
+    enabled: true
+    type: "X"
+  sound_completed:
+    enabled: true
+    type: "X"
+  particle_completed:
+    enabled: true
+    type: "X"
+abilitys:
+  resistance:
+    material: "IRON_INGOT"
+    actions:
+      - "RIGHT_CLICK"
+      - "LEFT_CLICK"
+    effects:
+      - RESISTANCE:3:5
+    cooldown: "30"
+  speed:
+    material: "SUGAR"
+    actions:
+      - "RIGHT_CLICK"
+      - "LEFT_CLICK"
+    effects:
+      - SPEED:4:7
+    cooldown: 30
+  jump:
+    material: "FEATHER"
+    actions:
+      - "RIGHT_CLICK"
+      - "LEFT_CLICK"
+    effects:
+      - JUMP:9:7
+    cooldown: "30"
