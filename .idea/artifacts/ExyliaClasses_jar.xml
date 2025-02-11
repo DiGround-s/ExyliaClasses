@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="ExyliaClasses:jar">
-    <output-path>$USER_HOME$/Desktop/JavaPlugins</output-path>
-    <root id="archive" name="ExyliaClasses.jar">
-      <element id="module-output" name="ExyliaClasses" />
-    </root>
-  </artifact>
-</component>

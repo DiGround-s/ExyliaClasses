@@ -1,11 +1,8 @@
 package net.diground.exyliaClasses.managers;
 
-import net.diground.exyliaClasses.models.Cooldown;
-import net.diground.exyliaClasses.models.EClass;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-import javax.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -13,114 +10,170 @@ import java.util.*;
  * Permite añadir, verificar, eliminar y listar cooldowns activos.
  */
 public class CooldownManager {
+    // Mapa para almacenar los cooldowns activos de cada jugador, donde el UUID del jugador es la clave
+    private final Map<UUID, Map<String, Long>> cooldowns;
 
-    // Mapa para almacenar los cooldowns de cada jugador, usando su UUID
-    private final Map<UUID, List<Cooldown>> playerCooldowns = new HashMap<>();
+    // Conjunto que almacena los UUIDs de los jugadores que tienen cooldowns activos
+    private final Set<UUID> activeCooldowns;
 
     /**
      * Constructor que inicializa las estructuras de datos para los cooldowns.
      */
     public CooldownManager() {
+        this.cooldowns = new HashMap<>();
+        this.activeCooldowns = new HashSet<>();
     }
 
     /**
      * Añade un cooldown para un ítem específico de un jugador.
      *
-     * @param player   El jugador al que se le aplica el cooldown.
-     * @param material El material del ítem al que se aplica el cooldown.
+     * @param player El jugador al que se le aplica el cooldown.
+     * @param itemName El nombre del ítem en cooldown.
      * @param cooldown La duración del cooldown en segundos.
+     * @param material El material relacionado con el ítem para aplicar cooldown visual (opcional).
      */
-    public void addCooldown(Player player, Material material, EClass eClass, double cooldown) {
+    public void addCooldown(Player player, String itemName, double cooldown, Material material) {
         long cooldownMillis = (long) (cooldown * 1000); // Convierte el cooldown de segundos a milisegundos
         long expirationTime = System.currentTimeMillis() + cooldownMillis;
 
-        Cooldown newCooldown = new Cooldown(player.getUniqueId(), material, expirationTime, eClass);
-
-        // Añadir el cooldown a la lista de cooldowns del jugador
-        playerCooldowns.computeIfAbsent(player.getUniqueId(), k -> new ArrayList<>()).add(newCooldown);
+        // Añadir o actualizar el cooldown en el mapa
+        cooldowns.computeIfAbsent(player.getUniqueId(), k -> new HashMap<>()).put(itemName, expirationTime);
 
         // Aplicar el cooldown visual al ítem si se especifica un material
-        player.setCooldown(material, (int) cooldown * 20); // El cooldown en Minecraft se mide en ticks (20 ticks = 1 segundo)
+        if (material != null) {
+            player.setCooldown(material, (int) cooldown * 20); // El cooldown en Minecraft se mide en ticks (20 ticks = 1 segundo)
+        }
+
+        // Añadir el jugador al conjunto de cooldowns activos
+        activeCooldowns.add(player.getUniqueId());
     }
 
     /**
      * Verifica si un cooldown está activo para un ítem específico de un jugador.
      *
-     * @param player   El jugador a verificar.
-     * @param material El material del ítem a verificar.
-     * @param eClass   La clase del ítem a verificar.
+     * @param player El jugador a verificar.
+     * @param itemName El nombre del ítem a verificar.
      * @return true si el cooldown está activo, false si no lo está.
      */
-    public boolean isCooldownActive(Player player, Material material, EClass eClass) {
-        List<Cooldown> cooldowns = playerCooldowns.get(player.getUniqueId());
-        if (cooldowns != null) {
-            for (Cooldown cooldown : cooldowns) {
-                if (cooldown.getMaterial() == material && cooldown.geteClass() == eClass) {
-                    if (System.currentTimeMillis() < cooldown.getTime()) {
-                        return true;
-                    } else {
-                        // El cooldown ha expirado, eliminarlo
-                        removeCooldown(player, material, eClass);
-                        return false;
-                    }
-                }
-            }
+    public boolean isCooldownActive(Player player, String itemName) {
+        Map<String, Long> playerCooldowns = cooldowns.get(player.getUniqueId());
+        if (playerCooldowns == null) {
+            return false; // No hay cooldowns para este jugador
         }
-        return false;
+
+        Long expirationTime = playerCooldowns.get(itemName);
+        if (expirationTime == null) {
+            return false; // No hay cooldown para este ítem
+        }
+
+        // Verificar si el cooldown no ha expirado
+        return System.currentTimeMillis() < expirationTime;
     }
 
     /**
      * Obtiene el tiempo restante de un cooldown en segundos.
      *
-     * @param player   El jugador a verificar.
-     * @param material El material del ítem a verificar.
-     * @param eClass   La clase del ítem a verificar.
+     * @param player El jugador a verificar.
+     * @param itemName El nombre del ítem a verificar.
      * @return El tiempo restante del cooldown en segundos. Retorna 0 si no hay cooldown activo.
      */
-    public double getRemainingCooldown(Player player, Material material, EClass eClass) {
-        List<Cooldown> cooldowns = playerCooldowns.get(player.getUniqueId());
-        if (cooldowns != null) {
-            for (Cooldown cooldown : cooldowns) {
-                if (cooldown.getMaterial() == material && cooldown.geteClass() == eClass) {
-                    long remainingTime = cooldown.getTime() - System.currentTimeMillis();
-                    if (remainingTime > 0) {
-                        return remainingTime / 1000.0; // Convertir a segundos
-                    } else {
-                        // El cooldown ha expirado, eliminarlo
-                        removeCooldown(player, material, eClass);
-                        return 0;
-                    }
-                }
-            }
+    public double getRemainingCooldown(Player player, String itemName) {
+        Map<String, Long> playerCooldowns = cooldowns.get(player.getUniqueId());
+        if (playerCooldowns == null) {
+            return 0;
         }
-        return 0;
+
+        Long expirationTime = playerCooldowns.get(itemName);
+        if (expirationTime == null) {
+            return 0;
+        }
+
+        long currentTime = System.currentTimeMillis();
+        long remainingMillis = expirationTime - currentTime;
+
+        // Convertir milisegundos a segundos y redondear a un decimal
+        double remainingSeconds = remainingMillis > 0 ? remainingMillis / 1000.0 : 0;
+
+        return Math.round(remainingSeconds * 10) / 10.0;
     }
 
     /**
      * Elimina un cooldown específico para un jugador y un ítem.
      *
-     * @param player   El jugador del que se eliminará el cooldown.
-     * @param material El material del ítem a verificar.
-     * @param eClass   La clase del ítem a verificar.
+     * @param player El jugador del que se eliminará el cooldown.
+     * @param itemName El nombre del ítem cuyo cooldown se eliminará.
+     * @param material El material relacionado para reiniciar el cooldown visual (opcional).
      */
-    public void removeCooldown(Player player, Material material, EClass eClass) {
-        List<Cooldown> cooldowns = playerCooldowns.get(player.getUniqueId());
-        if (cooldowns != null) {
-            cooldowns.removeIf(cooldown -> cooldown.getMaterial() == material && cooldown.geteClass() == eClass);
+    public void removeCooldown(Player player, String itemName, Material material) {
+        Map<String, Long> playerCooldowns = cooldowns.get(player.getUniqueId());
+        if (playerCooldowns != null) {
+            playerCooldowns.remove(itemName);
+            if (playerCooldowns.isEmpty()) {
+                cooldowns.remove(player.getUniqueId());
+                activeCooldowns.remove(player.getUniqueId());
+
+                // Reiniciar el cooldown visual del material
+                if (material != null) {
+                    player.setCooldown(material, 1);
+                }
+            }
         }
     }
+
 
     /**
      * Establece un nuevo cooldown para un ítem de un jugador.
      *
-     * @param player   El jugador al que se le aplica el cooldown.
-     * @param material El material del ítem a verificar.
-     * @param eClass   La clase del ítem a verificar.
+     * @param player El jugador al que se le aplica el cooldown.
+     * @param itemName El nombre del ítem en cooldown.
      * @param cooldown La duración del cooldown en segundos.
+     * @param material El material relacionado con el ítem para aplicar cooldown visual (opcional).
      */
-    public void setCooldown(Player player, Material material, EClass eClass, double cooldown) {
-        // Eliminar el cooldown existente antes de agregar uno nuevo
-        removeCooldown(player, material, eClass);
-        addCooldown(player, material, eClass, cooldown);
+    public void setCooldown(Player player, String itemName, double cooldown, Material material) {
+        long cooldownMillis = (long) (cooldown * 1000); // Convierte el cooldown de segundos a milisegundos
+        long expirationTime = System.currentTimeMillis() + cooldownMillis;
+        cooldowns.computeIfAbsent(player.getUniqueId(), k -> new HashMap<>()).put(itemName, expirationTime);
+
+        // Aplicar el cooldown visual al ítem si se especifica un material
+        if (material != null) {
+            player.setCooldown(material, (int) cooldown * 20); // El cooldown en Minecraft se mide en ticks (20 ticks = 1 segundo)
+        }
+    }
+
+    /**
+     * Obtiene una lista de ítems que están en cooldown para un jugador específico.
+     *
+     * @param player El jugador a verificar.
+     * @return Una lista de nombres de ítems que aún están en cooldown.
+     */
+    public List<String> getItemsInCooldown(Player player) {
+        List<String> itemsInCooldown = new ArrayList<>();
+        Map<String, Long> playerCooldowns = cooldowns.get(player.getUniqueId());
+
+        if (playerCooldowns != null) {
+            long currentTime = System.currentTimeMillis();
+
+            // Recorrer todos los cooldowns del jugador
+            for (Map.Entry<String, Long> entry : playerCooldowns.entrySet()) {
+                String itemName = entry.getKey();
+                Long expirationTime = entry.getValue();
+
+                // Añadir a la lista si el cooldown aún está activo
+                if (currentTime < expirationTime) {
+                    itemsInCooldown.add(itemName);
+                }
+            }
+        }
+
+        return itemsInCooldown;
+    }
+
+    /**
+     * Obtiene el conjunto de jugadores que tienen cooldowns activos.
+     *
+     * @return Un conjunto de UUIDs de jugadores con cooldowns activos.
+     */
+    public Set<UUID> getActiveCooldowns() {
+        return activeCooldowns;
     }
 }
