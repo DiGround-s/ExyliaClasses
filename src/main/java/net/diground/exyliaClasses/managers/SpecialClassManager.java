@@ -14,6 +14,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 
 import static net.diground.exyliaClasses.utils.EffectUtils.playParticle;
 import static net.diground.exyliaClasses.utils.EffectUtils.playSound;
@@ -33,10 +34,14 @@ public class SpecialClassManager {
         return classMap;
     }
 
+    private final Map<UUID, BukkitRunnable> effectCheckTasks = new HashMap<>();
+
     public void startClass(Player p, SpecialClass specialClass) {
         for (PotionEffect effect : specialClass.getPassiveEffects()) {
             p.addPotionEffect(effect);
         }
+
+        startEffectCheckTask(p, specialClass);
 
         if (specialClass.getEnergy().isEnabled()) {
             FileConfiguration cfg = plugin.getConfigManager().getConfig();
@@ -58,8 +63,40 @@ public class SpecialClassManager {
             p.removePotionEffect(effect.getType());
         }
 
+        cancelEffectCheckTask(p);
         cancelEnergyTask(p);
     }
+
+    private void startEffectCheckTask(Player p, SpecialClass specialClass) {
+        cancelEffectCheckTask(p);
+
+        BukkitRunnable task = new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (!p.isOnline()) {
+                    cancelEffectCheckTask(p);
+                    return;
+                }
+
+                for (PotionEffect effect : specialClass.getPassiveEffects()) {
+                    if (!p.hasPotionEffect(effect.getType())) {
+                        p.addPotionEffect(effect);
+                    }
+                }
+            }
+        };
+
+        task.runTaskTimer(plugin, 0L, 20L);
+        effectCheckTasks.put(p.getUniqueId(), task);
+    }
+
+    private void cancelEffectCheckTask(Player p) {
+        BukkitRunnable task = effectCheckTasks.remove(p.getUniqueId());
+        if (task != null) {
+            task.cancel();
+        }
+    }
+
 
     private void startEnergyTask(FileConfiguration cfg, Player player, SpecialClass specialClass) {
         Energy energy = specialClass.getEnergy();
