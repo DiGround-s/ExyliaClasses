@@ -1,7 +1,9 @@
 package net.diground.exyliaClasses.loaders;
 
 import net.diground.exyliaClasses.ExyliaClasses;
+import net.diground.exyliaClasses.managers.SpecialClassManager;
 import net.diground.exyliaClasses.models.*;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -16,14 +18,11 @@ import java.util.*;
 
 public class SpecialClassLoader {
     private final ExyliaClasses plugin;
-    private final Map<String, SpecialClass> classMap = new HashMap<>();
+    private final SpecialClassManager specialClassManager;
 
-    public Map<String, SpecialClass> getClassMap() {
-        return classMap;
-    }
-
-    public SpecialClassLoader(ExyliaClasses plugin) {
+    public SpecialClassLoader(ExyliaClasses plugin, SpecialClassManager specialClassManager) {
         this.plugin = plugin;
+        this.specialClassManager = specialClassManager;
     }
 
     public void loadClasses() {
@@ -58,7 +57,9 @@ public class SpecialClassLoader {
                 loadSoundEffect(config, "warmup.sound_cancel"),
                 loadParticleEffect(config, "warmup.particle_cancel")
         );
-        Map<String, Ability> abilities = loadAbilities(config, file);
+        Map<String, Ability> abilities = loadAbilities(id, config, file);
+        Map<String, HoldEffect> holdEffects = loadHoldEffects(config, file);
+        Energy energy = loadEnergy(config);
 
         // cargar armas
 //        Map<String, Weapon> weapons = loadWeapons(config, "weapons", file);
@@ -71,8 +72,8 @@ public class SpecialClassLoader {
         plugin.getLogger().info("Pasive Effects: " + passiveEffects);
         plugin.getLogger().info("Warmup cargado: " + warmup);
         plugin.getLogger().info("Abilities cargadas: " + abilities);
-        SpecialClass specialClass = new SpecialClass(id, displayName, permission, equipment, passiveEffects, warmup, abilities);
-        classMap.put(id, specialClass);
+        SpecialClass specialClass = new SpecialClass(id, displayName, permission, equipment, passiveEffects, warmup, abilities, holdEffects, energy);
+        specialClassManager.getClassMap().put(id, specialClass);
 
         plugin.getLogger().info("El item " + id + " se ha cargado correctamente.");
     }
@@ -96,11 +97,11 @@ public class SpecialClassLoader {
     private List<PotionEffect> loadPotionEffects(List<String> effectsList, File file) {
         List<PotionEffect> effects = new ArrayList<>();
         for (String entry : effectsList) {
-            String[] parts = entry.split(":");
+            String[] parts = entry.split("\\|");
             if (parts.length >= 2) {
                 PotionEffectType effectType = PotionEffectType.getByName(parts[0].toUpperCase());
                 int level = parseInt(parts[1], 1) - 1;
-                int duration = (parts.length == 3) ? parseInt(parts[2], 1) * 20 : Integer.MAX_VALUE;
+                int duration = (parts.length == 3) ? parseInt(parts[2], 1) * 20 : -1;
                 if (effectType != null) {
                     effects.add(new PotionEffect(effectType, duration, level, false, false));
                 } else {
@@ -113,7 +114,7 @@ public class SpecialClassLoader {
         return effects;
     }
 
-    private Map<String, Ability> loadAbilities(FileConfiguration config, File file) {
+    private Map<String, Ability> loadAbilities(String classId, FileConfiguration config, File file) {
         Map<String, Ability> abilities = new HashMap<>();
         ConfigurationSection section = config.getConfigurationSection("abilities");
         if (section != null) {
@@ -121,6 +122,8 @@ public class SpecialClassLoader {
                 ConfigurationSection abilitySection = section.getConfigurationSection(key);
                 if (abilitySection == null) continue;
 
+                String id = key + "_" + classId;
+                String displayName = abilitySection.getString("display_name", "ABILITY");
                 Material material = Material.matchMaterial(Objects.requireNonNull(abilitySection.getString("material")));
                 if (material == null) {
                     plugin.getLogger().warning("Material inválido en habilidad " + key);
@@ -134,11 +137,50 @@ public class SpecialClassLoader {
                 ParticleEffect particles = loadParticleEffect(abilitySection);
                 SoundEffect sound = loadSoundEffect(abilitySection);
 
-                abilities.put(key, new Ability(material, type, actions, effects, cooldown, particles, sound));
+                int radius = abilitySection.getInt("radius", 0);
+                int energyCost = abilitySection.getInt("energy_cost", 0);
+
+                abilities.put(key, new Ability(id, displayName, material, type, actions, effects, cooldown, particles, sound, radius, energyCost));
             }
         }
         return abilities;
     }
+
+    private Map<String, HoldEffect> loadHoldEffects(FileConfiguration config, File file) {
+        Map<String, HoldEffect> holdEffects = new HashMap<>();
+        ConfigurationSection section = config.getConfigurationSection("hold_effects");
+        if (section != null) {
+            for (String key : section.getKeys(false)) {
+                ConfigurationSection effectSection = section.getConfigurationSection(key);
+                if (effectSection == null) continue;
+
+                String materialName = effectSection.getString("material", "BLAZE_POWDER");
+                Material material = Material.matchMaterial(materialName);
+                if (material == null) {
+                    plugin.getLogger().warning("Material inválido en efecto de 'hold' " + key + " en " + file.getName() + ": " + materialName);
+                    continue;
+                }
+
+                String type = effectSection.getString("type", "TO_CLAN_AND_ALLY");
+                int radius = effectSection.getInt("radius", 35);
+                List<PotionEffect> effects = loadPotionEffects(effectSection.getStringList("effects"), file);
+
+                holdEffects.put(key, new HoldEffect(material, type, radius, effects));
+            }
+        }
+        return holdEffects;
+    }
+
+    private Energy loadEnergy(FileConfiguration config) {
+        boolean enabled = config.getBoolean("energy.enabled", false);
+        double maxEnergy = config.getDouble("energy.max_energy", 100.0);
+        int regenDelay = config.getInt("energy.regen_delay", 1);
+        double regenQuantity = config.getDouble("energy.regen_quantity", 0.1);
+
+        return new Energy(enabled, maxEnergy, regenDelay, regenQuantity);
+    }
+
+
 
     private SoundEffect loadSoundEffect(ConfigurationSection config) {
         if (config == null) return null;
@@ -150,12 +192,14 @@ public class SpecialClassLoader {
     private SoundEffect loadSoundEffect(FileConfiguration config, String path) {
         boolean enabled = config.getBoolean(path + ".enabled", false);
         String soundData = config.getString(path + ".type", "");
+
         return parseSoundEffect(enabled, soundData, path);
     }
 
+
     private SoundEffect parseSoundEffect(boolean enabled, String soundData, String path) {
         if (soundData.isEmpty()) return null;
-        String[] parts = soundData.split(":");
+        String[] parts = soundData.split("\\|");
         try {
             Sound sound = Sound.valueOf(parts[0].toUpperCase());
             float volume = (parts.length > 1) ? Float.parseFloat(parts[1]) : 1.0f;
@@ -170,21 +214,46 @@ public class SpecialClassLoader {
     private ParticleEffect loadParticleEffect(ConfigurationSection config) {
         if (config == null) return null;
         boolean enabled = config.getBoolean("particles.enabled", false);
-        String type = config.getString("particles.type", "");
-        return parseParticleEffect(enabled, type, "particles");
+        String particleConfig = config.getString("particles.type", "");
+
+        if (particleConfig.isEmpty()) return null;
+
+        String[] parts = particleConfig.split("\\|");
+        String particleType = parts[0];
+        int quantity = parts.length > 1 ? parseInt(parts[1], 1) : 1;
+        double offSetX = parts.length > 2 ? Double.parseDouble(parts[2]) : 0.0;
+        double offSetY = parts.length > 3 ? Double.parseDouble(parts[3]) : 0.0;
+        double offSetZ = parts.length > 4 ? Double.parseDouble(parts[4]) : 0.0;
+        double speed = parts.length > 5 ? Double.parseDouble(parts[5]) : 1.0;
+
+        try {
+            Particle particle = Particle.valueOf(particleType.toUpperCase());
+            return new ParticleEffect(enabled, particle, quantity, offSetX, offSetY, offSetZ, speed);
+        } catch (IllegalArgumentException e) {
+            plugin.getLogger().warning("Partícula inválida en " + config + ": " + particleType);
+            return null;
+        }
     }
 
     private ParticleEffect loadParticleEffect(FileConfiguration config, String path) {
         boolean enabled = config.getBoolean(path + ".enabled", false);
-        String type = config.getString(path + ".type", "");
-        return parseParticleEffect(enabled, type, path);
-    }
+        String particleConfig = config.getString(path + ".type", "");
 
-    private ParticleEffect parseParticleEffect(boolean enabled, String type, String path) {
+        if (particleConfig.isEmpty()) return null;
+
+        String[] parts = particleConfig.split("\\|");
+        String particleType = parts[0];
+        int quantity = parts.length > 1 ? parseInt(parts[1], 1) : 1;
+        double offSetX = parts.length > 2 ? Double.parseDouble(parts[2]) : 0.0;
+        double offSetY = parts.length > 3 ? Double.parseDouble(parts[3]) : 0.0;
+        double offSetZ = parts.length > 4 ? Double.parseDouble(parts[4]) : 0.0;
+        double speed = parts.length > 5 ? Double.parseDouble(parts[5]) : 1.0;
+
         try {
-            return type.isEmpty() ? null : new ParticleEffect(enabled, Particle.valueOf(type.toUpperCase()));
+            Particle particle = Particle.valueOf(particleType.toUpperCase());
+            return new ParticleEffect(enabled, particle, quantity, offSetX, offSetY, offSetZ, speed);
         } catch (IllegalArgumentException e) {
-            plugin.getLogger().warning("Partícula inválida en " + path + ": " + type);
+            plugin.getLogger().warning("Partícula inválida en " + path + ": " + particleType);
             return null;
         }
     }
@@ -196,8 +265,4 @@ public class SpecialClassLoader {
             return defaultValue;
         }
     }
-
-
-
-
 }

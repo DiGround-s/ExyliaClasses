@@ -1,20 +1,20 @@
 package net.diground.exyliaClasses.utils;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import net.diground.exyliaClasses.ExyliaClasses;
+import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import org.bukkit.Bukkit;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.regex.Pattern;
+import net.kyori.adventure.title.Title;
+import net.md_5.bungee.api.ChatColor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class ColorUtils {
 
-    private static final Pattern HEX_PATTERN = Pattern.compile("#[0-9A-Fa-f]{6}");
-    private static final Pattern LEGACY_PATTERN = Pattern.compile("&[0-9a-fk-or]");
-    private static final Pattern CUSTOM_HEX_PATTERN = Pattern.compile("<#[0-9A-Fa-f]{6}>");
     private static final Map<Character, String> COLOR_MAP;
 
     static {
@@ -75,73 +75,35 @@ public class ColorUtils {
                 .decoration(TextDecoration.ITALIC, false);
     }
 
-    public static String translateColorsString(String message) {
-        if (message == null || !message.contains("&")) {
-            return message;
-        }
-
-        // Reemplazar códigos de color con etiquetas MiniMessage
-        StringBuilder builder = new StringBuilder(message.length() + 16);
-        int length = message.length();
-
-        for (int i = 0; i < length; i++) {
-            char c = message.charAt(i);
-            if (c == '&' && i + 1 < length) {
-                char next = message.charAt(i + 1);
-                String replacement = COLOR_MAP.get(next);
-                if (replacement != null) {
-                    builder.append(replacement);
-                    i++;
-                } else {
-                    builder.append(c);
-                }
-            } else {
-                builder.append(c);
-            }
-        }
-
-        // Convertir el mensaje formateado con MiniMessage a un Component
-        Component component = MiniMessage.miniMessage().deserialize(builder.toString());
-
-        // Convertir el Component a una cadena en formato legacy
-        return LegacyComponentSerializer.legacySection().serialize(component);
+    public static String oldTranslateColors(String message) {
+        return ChatColor.translateAlternateColorCodes('&', GradientUtils.applyGradientsAndHex(message));
     }
 
-    // Validar y transformar color
-    public static String formatColor(String color) {
-        if (HEX_PATTERN.matcher(color).matches()) {
-            return "<#" + color.substring(1) + ">";
-        } else if (LEGACY_PATTERN.matcher(color).matches()) {
-            char code = color.charAt(1);
-            return COLOR_MAP.getOrDefault(code, "<reset>");
-        } else if (CUSTOM_HEX_PATTERN.matcher(color).matches()) {
-            return color;
-        } else {
-            return "<reset>"; // Retornar un color por defecto si no es válido
+    public static void sendPlayerMessage(Player player, String message) {
+        Component component = ColorUtils.translateColors(message);
+        ExyliaClasses.getInstance().getAudience().player(player).sendMessage(component);
+    }
+
+    public static void sendSenderMessage(CommandSender sender, String message) {
+        Component component = ColorUtils.translateColors(message);
+        ExyliaClasses.getInstance().getAudience().sender(sender).sendMessage(component);
+    }
+
+    public static void showPlayerBossbar(Player player, BossBar bossBar) {
+        ExyliaClasses.getInstance().getAudience().player(player).showBossBar(bossBar);
+    }
+
+    public static void hidePlayerBossbar(Player player, BossBar bossBar) {
+        ExyliaClasses.getInstance().getAudience().player(player).hideBossBar(bossBar);
+    }
+
+    public static void sendPlayerTitle(Player player, Title title) {
+        ExyliaClasses.getInstance().getAudience().player(player).showTitle(title);
+    }
+
+    public static void sendBroadcastMessage(String message) {
+        for (Player player : ExyliaClasses.getInstance().getServer().getOnlinePlayers()) {
+            ExyliaClasses.getInstance().getAudience().player(player).sendMessage(ColorUtils.translateColors(message));
         }
     }
-
-    public static boolean isValidColor(String color) {
-        return HEX_PATTERN.matcher(color).matches() ||
-                LEGACY_PATTERN.matcher(color).matches() ||
-                CUSTOM_HEX_PATTERN.matcher(color).matches();
-    }
-
-    public static int getColorDecimal(String hexColor) {
-        // Eliminar los posibles prefijos y el símbolo '#'
-        hexColor = hexColor.replaceAll("<#|>|&#", "").replaceAll("#", "");
-
-        // Convertir el valor hexadecimal a decimal
-        try {
-            Bukkit.getLogger().info("Color: " + hexColor);
-            int colorDecimal = Integer.parseInt(hexColor, 16);
-            Bukkit.getLogger().info("Color decimal: " + colorDecimal);
-            return colorDecimal;
-        } catch (NumberFormatException e) {
-            // Manejar error en caso de que el formato no sea válido
-            System.err.println("Error: Formato de color hexadecimal inválido.");
-            return 0; // Devolver 0 o algún valor predeterminado en caso de error
-        }
-    }
-
 }

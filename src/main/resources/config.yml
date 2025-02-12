@@ -1,0 +1,6 @@
+energy:
+  bossbar:
+    enabled: true
+    title: "<#ffc58f>Energía: %energy% ⚡"
+    color: YELLOW
+    style: NOTCHED_20

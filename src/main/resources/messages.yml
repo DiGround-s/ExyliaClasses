@@ -1,2 +1,15 @@
-prefix: "<#8a51c4>&lCLASES &r"
-warmup: "%prefix% <#ffc58f>Serás %class_display_name%<#ffc58f> en %time%s"
+prefix: "<#8a51c4>&lCLASES&r"
+no_permission: "%prefix% <#a33b53>¡No tienes permisos para usar la clase %class_display_name%&r<#a33b53>!"
+warmup:
+  timer: "%prefix% <#ffc58f>Serás %class_display_name%&r<#ffc58f> en %time%s"
+  ready: "%prefix% <#8fffc1>¡Ahora eres %class_display_name%&r<#8fffc1>!"
+  canceled: "%prefix% <#a33b53>¡Tu armadura ha cambiado y se ha cancelado el cambio de clase!"
+  finish: "%prefix% <#a33b53>¡Tu armadura ha cambiado y ya no eres un %class_display_name%&r<#a33b53>!"
+abilities:
+  cooldown: "%prefix% <#ffc58f>¡Tu habilidad %ability_display_name%&r<#ffc58f> aún está en enfriamiento, <#aa76de>%time%s restantes<#ffc58f>!"
+  used: "%prefix% <#8fffc1>¡Haz utilizado la habilidad %ability_display_name%&r<#8fffc1>!"
+  used_with_energy: "%prefix% <#8fffc1>¡Haz utilizado la habilidad %ability_display_name%&r<#8fffc1> y haz consumido <#ffc58f>%energy% ⚡<#8fffc1>!"
+  clan_informate: "%prefix% <#8fffc1>¡Obtuviste %ability_display_name%&r<#8fffc1> gracias a <#aa76de>%clan_player_name%&r<#8fffc1>!"
+  enemy_informate: "%prefix% <#a33b53¡>Obtuviste %ability_display_name%&r<#a33b53> por culpa de <#aa76de>%clan_player_name%&r<#a33b53>!"
+energy:
+  not_enough: "%prefix% <#a33b53>No tienes suficiente energía para usar %ability_display_name%&r<#a33b53>, tienes <#8fffc1>%actual_energy% ⚡ <#a33b53>y necesitas <#ffc58f>%needed_energy% ⚡<#a33b53>."

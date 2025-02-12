@@ -1,46 +1,106 @@
 package net.diground.exyliaClasses;
 
-//import net.diground.exyliaClasses.listeners.classes.ArcherListener;
-//import net.diground.exyliaClasses.listeners.ArmorListener;
-//import net.diground.exyliaClasses.listeners.PlayerListener;
-//import net.diground.exyliaClasses.listeners.classes.MinerListener;
+import me.ulrich.clans.interfaces.UClans;
+import net.diground.exyliaClasses.listeners.AbilityListener;
+import net.diground.exyliaClasses.listeners.ArmorListener;
+import net.diground.exyliaClasses.listeners.HoldEffectListener;
 import net.diground.exyliaClasses.loaders.SpecialClassLoader;
-import net.diground.exyliaClasses.managers.CooldownManager;
-import org.bukkit.entity.Player;
+import net.diground.exyliaClasses.managers.*;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class ExyliaClasses extends JavaPlugin {
 
+    private static ExyliaClasses instance;
+
+
+    private ConfigManager configManager;
     private SpecialClassLoader specialClassLoader;
     private CooldownManager cooldownManager;
+    private SpecialClassManager specialClassManager;
+    private PlayerInfoManager playerInfoManager;
+    private WarmupManager warmupManager;
+    private ClanManager clanManager;
 
+    private BukkitAudiences adventure;
+
+    private UClans uClans;
+
+    public BukkitAudiences adventure() {
+        if(this.adventure == null) {
+            throw new IllegalStateException("Tried to access Adventure when the plugin was disabled!");
+        }
+        return this.adventure;
+    }
     @Override
     public void onEnable() {
+        this.adventure = BukkitAudiences.create(this);
+        instance = this;
         loadManagers();
         loadListeners();
     }
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        if(this.adventure != null) {
+            this.adventure.close();
+            this.adventure = null;
+        }
     }
 
     private void loadManagers() {
-        specialClassLoader = new SpecialClassLoader(this);
+        configManager = new ConfigManager(this);
+        specialClassManager = new SpecialClassManager(this);
+        specialClassLoader = new SpecialClassLoader(this, specialClassManager);
         specialClassLoader.loadClasses();
+        warmupManager = new WarmupManager(this);
+        playerInfoManager = new PlayerInfoManager();
         cooldownManager = new CooldownManager();
+        clanManager = new ClanManager(this);
     }
 
     private void loadListeners() {
-//        getServer().getPluginManager().registerEvents(new ArmorListener(this), this);
-//        getServer().getPluginManager().registerEvents(new ArcherListener(this), this);
-//        getServer().getPluginManager().registerEvents(new MinerListener(this), this);
-//        getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
+        getServer().getPluginManager().registerEvents(new ArmorListener(this), this);
+        getServer().getPluginManager().registerEvents(new AbilityListener(this), this);
+        getServer().getPluginManager().registerEvents(new HoldEffectListener(this), this);
     }
 
     public SpecialClassLoader getSpecialClassLoader() { return specialClassLoader; }
 
     public CooldownManager getCooldownManager() {
         return cooldownManager;
+    }
+
+    public SpecialClassManager getSpecialClassManager() { return specialClassManager; }
+
+    public PlayerInfoManager getPlayerInfoManager() { return playerInfoManager; }
+
+    public WarmupManager getWarmupManager() { return warmupManager; }
+
+    public ConfigManager getConfigManager() { return configManager; }
+
+    public ClanManager getClanManager() { return clanManager; }
+
+    public BukkitAudiences getAudience() {
+        return adventure();
+    }
+
+    public static ExyliaClasses getInstance() {
+        return instance;
+    }
+
+
+    public UClans getUClans() {
+        if (uClans == null) {
+            Plugin plugin = Bukkit.getPluginManager().getPlugin("UltimateClans");
+            if (plugin instanceof UClans) {
+                uClans = (UClans) plugin;
+            } else {
+                return null;
+            }
+        }
+        return uClans;
     }
 }

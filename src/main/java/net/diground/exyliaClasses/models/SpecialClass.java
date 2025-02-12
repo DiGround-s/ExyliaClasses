@@ -15,11 +15,13 @@ public class SpecialClass {
     private Warmup warmup;
     private Map<String, Ability> abilities;
     private Map<String, Weapon> weapons;
+    private Map<String, HoldEffect> holdEffects;
+    private Energy energy;
 
     // Constructor
     public SpecialClass(String id, String displayName, String permission, Map<String, Material> equipment,
                   List<PotionEffect> passiveEffects, Warmup warmup,
-                  Map<String, Ability> abilities) { //, Map<String, Weapon> weapons
+                  Map<String, Ability> abilities, Map<String, HoldEffect> holdEffects, Energy energy) { //, Map<String, Weapon> weapons
         this.id = id;
         this.displayName = displayName;
         this.permission = permission;
@@ -27,6 +29,8 @@ public class SpecialClass {
         this.passiveEffects = passiveEffects;
         this.warmup = warmup;
         this.abilities = abilities;
+        this.holdEffects = holdEffects;
+        this.energy = energy;
 //        this.weapons = weapons;
     }
 
@@ -92,5 +96,21 @@ public class SpecialClass {
 
     public void setWeapons(Map<String, Weapon> weapons) {
         this.weapons = weapons;
+    }
+
+    public Map<String, HoldEffect> getHoldEffects() {
+        return holdEffects;
+    }
+
+    public void setHoldEffects(Map<String, HoldEffect> holdEffects) {
+        this.holdEffects = holdEffects;
+    }
+
+    public Energy getEnergy() {
+        return energy;
+    }
+
+    public void setEnergy(Energy energy) {
+        this.energy = energy;
     }
 }

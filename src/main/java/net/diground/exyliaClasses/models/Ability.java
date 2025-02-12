@@ -6,6 +6,8 @@ import org.bukkit.potion.PotionEffect;
 import java.util.List;
 
 public class Ability {
+    private String id;
+    private String displayName;
     private Material material;
     private String type;
     private List<String> actions;
@@ -13,8 +15,12 @@ public class Ability {
     private int cooldown;
     private ParticleEffect particles;
     private SoundEffect sound;
+    private int radius;
+    private double energyCost;
 
-    public Ability(Material material, String type, List<String> actions, List<PotionEffect> effects, int cooldown, ParticleEffect particles, SoundEffect sound) {
+    public Ability(String id, String displayName, Material material, String type, List<String> actions, List<PotionEffect> effects, int cooldown, ParticleEffect particles, SoundEffect sound, int radius, double energyCost) {
+        this.id = id;
+        this.displayName = displayName;
         this.material = material;
         this.type = type;
         this.actions = actions;
@@ -22,6 +28,24 @@ public class Ability {
         this.cooldown = cooldown;
         this.particles = particles;
         this.sound = sound;
+        this.radius = radius;
+        this.energyCost = energyCost;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     public Material getMaterial() {
@@ -78,5 +102,21 @@ public class Ability {
 
     public void setSound(SoundEffect sound) {
         this.sound = sound;
+    }
+
+    public int getRadius() {
+        return radius;
+    }
+
+    public void setRadius(int radius) {
+        this.radius = radius;
+    }
+
+    public double getEnergyCost() {
+        return energyCost;
+    }
+
+    public void setEnergyCost(double energyCost) {
+        this.energyCost = energyCost;
     }
 }
