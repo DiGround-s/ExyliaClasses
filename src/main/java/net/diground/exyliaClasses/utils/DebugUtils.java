@@ -4,6 +4,7 @@ import net.diground.exyliaClasses.ExyliaClasses;
 
 public class DebugUtils {
     public static void logDebug(String message){
+        if (!ExyliaClasses.getInstance().getConfigManager().getConfig().getBoolean("debug")) return;
         ExyliaClasses.getInstance().getLogger().info("[DEBUG] " + message);
     }
     public static void logError(String message){

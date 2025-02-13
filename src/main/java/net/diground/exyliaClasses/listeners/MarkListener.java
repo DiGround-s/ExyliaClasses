@@ -51,6 +51,8 @@ public class MarkListener implements Listener {
         SpecialClass currentClass = playerInfo.getCurrentClass();
         if (currentClass == null) return;
         MarkWeapon markWeapon = null;
+        Entity hitEntity = event.getEntity();
+        if (!(hitEntity instanceof Player target)) return;
         for (Weapon weapon : currentClass.getWeapons().values()) {
             if (weapon instanceof MarkWeapon mw && Objects.equals(mw.getMaterial(), "ARROW")) {
                 markWeapon = mw;
@@ -61,8 +63,6 @@ public class MarkListener implements Listener {
         if (markWeapon == null) {
             return;
         }
-        Entity hitEntity = event.getEntity();
-        if (!(hitEntity instanceof Player target)) return;
 
         if (!markWeapon.isMarkSameClass()) {
             PlayerInfo targetInfo = plugin.getPlayerInfoManager().getPlayerInfo(target);

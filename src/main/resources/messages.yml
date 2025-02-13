@@ -19,3 +19,8 @@ weapons:
     mark: "%prefix% <#8fffc1>Haz marcado al jugador <#aa76de>%target_name% <#8fffc1>y ahora recibe un <#aa76de>%extra_damage%% extra de daño<#8fffc1>."
     marked: "%prefix% <#a33b53>%attacker_name%<#ffc58f> te ha marcado y ahora recibes un <#a33b53>%extra_damage%% extra de daño<#ffc58f>."
     mark_clean: "%prefix% <#8fffc1>Se han eliminado todas tus marcas."
+  backstab:
+    insufficient_cooldown: "%prefix% <#ffc58f>Tu espada tiene que estar cargada al menos al <#aa76de>%need_cooldown%% <#ffc58f>pero estaba al <#aa76de>%actual_cooldown%%<#ffc58f>."
+    cant_dead: "%prefix% <#a33b53>No puedes matar a jugadores con esta habilidad."
+    success: "prefix% <#8fffc1>¡Haz hecho un ataque sorpresa!"
+    success_target: "%prefix% <#ffc58f>¡Te han hecho un ataque sorpresa!"

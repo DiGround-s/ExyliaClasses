@@ -98,11 +98,15 @@ public class WeaponLoader {
     private static BackstabWeapon loadBackstabWeapon(ConfigurationSection section, String material) {
         boolean breakItem = section.getBoolean("break_item");
         int extraDamage = section.getInt("extra_damage");
+        int attackCooldownNeed = section.getInt("attack_cooldown_need");
+        boolean canDead = section.getBoolean("can_dead");
 
         return new BackstabWeapon(
                 material,
                 breakItem,
                 extraDamage,
+                canDead,
+                attackCooldownNeed,
                 loadParticleEffect(section.getConfigurationSection("attacked_particles")),
                 loadParticleEffect(section.getConfigurationSection("attacker_particles")),
                 loadSoundEffect(section.getConfigurationSection("attacked_sound")),

@@ -1,10 +1,7 @@
 package net.diground.exyliaClasses;
 
 import me.ulrich.clans.interfaces.UClans;
-import net.diground.exyliaClasses.listeners.AbilityListener;
-import net.diground.exyliaClasses.listeners.ArmorListener;
-import net.diground.exyliaClasses.listeners.HoldEffectListener;
-import net.diground.exyliaClasses.listeners.MarkListener;
+import net.diground.exyliaClasses.listeners.*;
 import net.diground.exyliaClasses.loaders.SpecialClassLoader;
 import net.diground.exyliaClasses.managers.*;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
@@ -67,6 +64,7 @@ public final class ExyliaClasses extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new AbilityListener(this), this);
         getServer().getPluginManager().registerEvents(new HoldEffectListener(this), this);
         getServer().getPluginManager().registerEvents(new MarkListener(this), this);
+        getServer().getPluginManager().registerEvents(new BackstabListener(this), this);
     }
 
     public SpecialClassLoader getSpecialClassLoader() { return specialClassLoader; }

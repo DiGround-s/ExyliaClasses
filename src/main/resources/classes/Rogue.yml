@@ -88,10 +88,12 @@ abilities:
       type: "BLOCK_BEACON_POWER_SELECT|1|1"
 weapons:
   backstab:
-    material: "GOLDEN_SWORD" # Solo la espada de oro por la espalda activara este efecto
+    material: "GOLDEN_SWORD"
     type: "BACKSTAB"
-    break_item: true # Romper instantaneamente despues de ser usada
+    break_item: true
+    can_dead: false
     extra_damage: 8
+    attack_cooldown_need: 60
     attacked_effects:
       - SLOW|1|3
     attacker_effects:
