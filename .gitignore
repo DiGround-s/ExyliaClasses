@@ -1,2 +1,7 @@
 # Project exclude paths
-/target/
+gradlew
+gradlew.bat
+gradle.properties
+/.gradle/*
+/build/*
+/gradle/*

@@ -51,15 +51,15 @@ public final class ExyliaClasses extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        if(this.adventure != null) {
-            this.adventure.close();
-            this.adventure = null;
-        }
         for (Player p : getServer().getOnlinePlayers()) {
             SpecialClass currentClass = getPlayerInfoManager().getPlayerInfo(p).getCurrentClass();
             if (currentClass != null) {
                 getSpecialClassManager().cancelClass(p, currentClass);
             }
+        }
+        if(this.adventure != null) {
+            this.adventure.close();
+            this.adventure = null;
         }
     }
 

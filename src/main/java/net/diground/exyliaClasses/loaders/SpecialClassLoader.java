@@ -76,28 +76,6 @@ public class SpecialClassLoader {
         // cargar armas
         Map<String, Weapon> weapons = loadWeapons(config);
 
-        for (Map.Entry<String, Weapon> entry : weapons.entrySet()) {
-            String name = entry.getKey();
-            Weapon weapon = entry.getValue();
-
-            plugin.getLogger().info("Weapon Name: " + name);
-            plugin.getLogger().info("Material: " + weapon.getMaterial());
-            plugin.getLogger().info("Type: " + weapon.getType());
-
-            // Si es una BackstabWeapon, mostramos su extraDamage
-            if (weapon instanceof BackstabWeapon backstabWeapon) {
-                plugin.getLogger().info("Extra Damage: " + backstabWeapon.getExtraDamage());
-                plugin.getLogger().info("Breaks Item: " + backstabWeapon.shouldBreakItem());
-            }
-
-            // Si es una MarkWeapon, mostramos su duración y marcas
-            if (weapon instanceof MarkWeapon markWeapon) {
-                plugin.getLogger().info("Mark Duration: " + markWeapon.getMarkDuration());
-                plugin.getLogger().info("Marks: " + markWeapon.getMarks().size());
-            }
-        }
-
-
         // Debugging
         plugin.getLogger().info("Clase cargada: " + id);
         SpecialClass specialClass = new SpecialClass(id, displayName, permission, equipment, passiveEffects, warmup, abilities, holdEffects, energy, weapons);

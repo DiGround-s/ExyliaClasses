@@ -69,8 +69,6 @@ public class SpecialClassManager {
     }
 
     public void cancelClass(Player p, SpecialClass specialClass) {
-        PlayerInfo playerInfo = plugin.getPlayerInfoManager().getPlayerInfo(p);
-        playerInfo.setCurrentClass(null);
         ConfigManager cfg = plugin.getConfigManager();
         playSound(p, specialClass.getWarmup().getSoundCancel());
         playParticle(p, specialClass.getWarmup().getParticleCancel());
@@ -83,6 +81,8 @@ public class SpecialClassManager {
 
         cancelEffectCheckTask(p);
         cancelEnergyTask(p);
+        PlayerInfo playerInfo = plugin.getPlayerInfoManager().getPlayerInfo(p);
+        playerInfo.setCurrentClass(null);
     }
 
     private void startEffectCheckTask(Player p, SpecialClass specialClass) {

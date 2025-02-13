@@ -7,7 +7,6 @@ import net.diground.exyliaClasses.models.weapons.MarkEffect;
 import net.diground.exyliaClasses.models.weapons.MarkWeapon;
 import net.diground.exyliaClasses.models.utils.ParticleEffect;
 import net.diground.exyliaClasses.models.utils.SoundEffect;
-import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
