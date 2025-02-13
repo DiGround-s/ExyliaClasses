@@ -1,4 +1,4 @@
-package net.diground.exyliaClasses.models;
+package net.diground.exyliaClasses.models.utils;
 
 import org.bukkit.Particle;
 

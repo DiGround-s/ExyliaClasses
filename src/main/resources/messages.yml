@@ -13,3 +13,9 @@ abilities:
   enemy_informate: "%prefix% <#a33b53¡>Obtuviste %ability_display_name%&r<#a33b53> por culpa de <#aa76de>%clan_player_name%&r<#a33b53>!"
 energy:
   not_enough: "%prefix% <#a33b53>No tienes suficiente energía para usar %ability_display_name%&r<#a33b53>, tienes <#8fffc1>%actual_energy% ⚡ <#a33b53>y necesitas <#ffc58f>%needed_energy% ⚡<#a33b53>."
+weapons:
+  mark:
+    same_class: "%prefix% <#a33b53>No puedes marcar a un jugador con tu misma clase."
+    mark: "%prefix% <#8fffc1>Haz marcado al jugador <#aa76de>%target_name% <#8fffc1>y ahora recibe un <#aa76de>%extra_damage%% extra de daño<#8fffc1>."
+    marked: "%prefix% <#a33b53>%attacker_name%<#ffc58f> te ha marcado y ahora recibes un <#a33b53>%extra_damage%% extra de daño<#ffc58f>."
+    mark_clean: "%prefix% <#8fffc1>Se han eliminado todas tus marcas."

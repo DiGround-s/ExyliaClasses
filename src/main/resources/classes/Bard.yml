@@ -74,7 +74,7 @@ warmup:
     type: "BLOCK_ANVIL_PLACE|1|1"
   particle_cancel:
     enabled: true
-    type: "DRIPPING_LAVA|100|1.5|1.5|1.5|3"
+    type: "DRIP_LAVA|100|1.5|1.5|1.5|3"
 
 energy:
   enabled: true
@@ -199,7 +199,7 @@ abilities:
     cooldown: "7"
     particles:
       enabled: true
-      type: "DRIPPING_LAVA|100|1.5|1.5|1.5|2"
+      type: "DRIP_LAVA|100|1.5|1.5|1.5|2"
     sound:
       enabled: true
       type: "ENTITY_EVOKER_PREPARE_SUMMON|1|1"
@@ -219,7 +219,7 @@ abilities:
     cooldown: "7"
     particles:
       enabled: true
-      type: "ENCHANT|100|1.5|1.5|1.5|2"
+      type: "ENCHANTMENT_TABLE|100|1.5|1.5|1.5|2"
     sound:
       enabled: true
       type: "ENTITY_EVOKER_PREPARE_SUMMON|1|1"

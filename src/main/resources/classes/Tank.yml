@@ -29,7 +29,7 @@ warmup:
     type: "BLOCK_ANVIL_PLACE|1|1"
   particle_cancel:
     enabled: true
-    type: "DRIPPING_LAVA|100|1.5|1.5|1.5|3"
+    type: "DRIP_LAVA|100|1.5|1.5|1.5|3"
 
 abilities:
   resistance:

@@ -1,7 +1,7 @@
 package net.diground.exyliaClasses.utils;
 
-import net.diground.exyliaClasses.models.ParticleEffect;
-import net.diground.exyliaClasses.models.SoundEffect;
+import net.diground.exyliaClasses.models.utils.ParticleEffect;
+import net.diground.exyliaClasses.models.utils.SoundEffect;
 import org.bukkit.entity.Player;
 
 public class EffectUtils {

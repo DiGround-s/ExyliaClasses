@@ -36,7 +36,7 @@ warmup:
     type: "BLOCK_ANVIL_PLACE|1|1"
   particle_cancel:
     enabled: true
-    type: "DRIPPING_LAVA|100|1.5|1.5|1.5|3"
+    type: "DRIP_LAVA|100|1.5|1.5|1.5|3"
 
 # Special and unique abilities of the class
 abilities:
@@ -119,22 +119,97 @@ abilities:
 # Specials and unique weapons with ability
 weapons:
   bow:
-    material: "BOW"
+    material: "ARROW" #Todas las flechas que se disparen de esta clase probocaran el efecto
     type: "MARK"
+    mark_duration: 8.0
+    give_glow: true
+    can_mark_same_class: false
+    same_class_error_sound:
+      enabled: true
+      type: BLOCK_NOTE_BLOCK_BASS|1|1
     marks:
       one:
-        mark_number: "1"
-        extra_damage: "10"
+        mark_number: 1
+        extra_damage: 7
         color: "&a"
         icon: "1"
+        attacked_effects:
+          - SLOW|1|1
+        attacker_effects:
+          - DOLPHINS_GRACE|3|3
+        attacked_particles:
+          enabled: true
+          type: "SPELL_WITCH|100|1.5|1.5|1.5|3"
+        attacked_sound:
+          enabled: true
+          type: "ENTITY_GOAT_HORN_BREAK|1|1"
+        attacker_particles:
+          enabled: true
+          type: "VILLAGER_HAPPY|100|1.5|1.5|1.5|3"
+        attacker_sound:
+          enabled: true
+          type: "ENTITY_GOAT_HORN_BREAK|1|1"
       two:
-        mark_number: "2"
-        extra_damage: "20"
+        mark_number: 2
+        extra_damage: 14
         color: "&e"
         icon: "2"
+        attacked_effects:
+          - SLOW|1|1
+        attacker_effects:
+          - DOLPHINS_GRACE|3|3
+        attacked_particles:
+          enabled: true
+          type: "SPELL_WITCH|100|1.5|1.5|1.5|3"
+        attacked_sound:
+          enabled: true
+          type: "ENTITY_GOAT_HORN_BREAK|1|1"
+        attacker_particles:
+          enabled: true
+          type: "VILLAGER_HAPPY|100|1.5|1.5|1.5|3"
+        attacker_sound:
+          enabled: true
+          type: "ENTITY_GOAT_HORN_BREAK|1|1"
       three:
-        mark_number: "3"
-        extra_damage: "30"
+        mark_number: 3
+        extra_damage: 21
         color: "&c"
         icon: "3"
-    mark_duration: "8"
+        attacked_effects:
+          - SLOW|1|1
+        attacker_effects:
+          - DOLPHINS_GRACE|3|3
+        attacked_particles:
+          enabled: true
+          type: "SPELL_WITCH|100|1.5|1.5|1.5|3"
+        attacked_sound:
+          enabled: true
+          type: "ENTITY_GOAT_HORN_BREAK|1|1"
+        attacker_particles:
+          enabled: true
+          type: "VILLAGER_HAPPY|100|1.5|1.5|1.5|3"
+        attacker_sound:
+          enabled: true
+          type: "ENTITY_GOAT_HORN_BREAK|1|1"
+      four:
+        remove_invisibility: true
+        mark_number: 4
+        extra_damage: 30
+        color: "&4"
+        icon: "4"
+        attacked_effects:
+          - SLOW|1|1
+        attacker_effects:
+          - DOLPHINS_GRACE|3|3
+        attacked_particles:
+          enabled: true
+          type: "SPELL_WITCH|100|1.5|1.5|1.5|3"
+        attacked_sound:
+          enabled: true
+          type: "ENTITY_GOAT_HORN_BREAK|1|1"
+        attacker_particles:
+          enabled: true
+          type: "VILLAGER_HAPPY|100|1.5|1.5|1.5|3"
+        attacker_sound:
+          enabled: true
+          type: "ENTITY_GOAT_HORN_BREAK|1|1"

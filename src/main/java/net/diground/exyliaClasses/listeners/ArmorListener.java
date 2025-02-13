@@ -25,6 +25,13 @@ public class ArmorListener implements Listener {
 
     @EventHandler
     private void onArmorEquip(PlayerArmorChangeEvent event) {
+        if (event.getOldItem() != null && event.getNewItem() != null) {
+            if (event.getOldItem().getType() == event.getNewItem().getType() &&
+                    event.getOldItem().getItemMeta().hasCustomModelData() == event.getNewItem().getItemMeta().hasCustomModelData()) {
+                return;
+            }
+        }
+
         Player player = event.getPlayer();
         PlayerInfo playerInfo = plugin.getPlayerInfoManager().getPlayerInfo(player);
 

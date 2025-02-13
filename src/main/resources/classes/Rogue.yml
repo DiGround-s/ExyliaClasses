@@ -1,0 +1,111 @@
+display-name: "<#7d0606>&lPÍCARO"
+permission: "NONE"
+equipment:
+  helmet: "CHAINMAIL_HELMET"
+  chestplate: "CHAINMAIL_CHESTPLATE"
+  leggings: "CHAINMAIL_LEGGINGS"
+  boots: "CHAINMAIL_BOOTS"
+pasive_effects:
+  - SPEED|3
+  - JUMP|2
+  - RESISTANCE|1
+  - INVISIBILITY|1
+warmup:
+  time: 5
+  sound:
+    enabled: true
+    type: "BLOCK_AMETHYST_BLOCK_PLACE|1|1"
+  particle:
+    enabled: true
+    type: "BUBBLE_POP|100|1.5|1.5|1.5|3"
+  sound_completed:
+    enabled: true
+    type: "BLOCK_PISTON_EXTEND|1|1"
+  particle_completed:
+    enabled: true
+    type: "REVERSE_PORTAL|100|1.5|1.5|1.5|3"
+  sound_cancel:
+    enabled: true
+    type: "BLOCK_ANVIL_PLACE|1|1"
+  particle_cancel:
+    enabled: true
+    type: "DRIP_LAVA|100|1.5|1.5|1.5|3"
+
+abilities:
+  resistance:
+    display_name: "<#ababab>&lRESISTENCIA"
+    material: "IRON_INGOT"
+    type: "SELF"
+    actions:
+      - "RIGHT_CLICK_AIR"
+      - "RIGHT_CLICK_BLOCK"
+      - "LEFT_CLICK_AIR"
+      - "LEFT_CLICK_BLOCK"
+    effects:
+      - RESISTANCE|3|5
+    cooldown: "30"
+    particles:
+      enabled: true
+      type: "CAMPFIRE_COSY_SMOKE|100|1.5|1.5|1.5|3"
+    sound:
+      enabled: true
+      type: "BLOCK_BEACON_POWER_SELECT|1|1"
+  speed:
+    display_name: "<#63fffa>&lVELOCIDAD"
+    material: "SUGAR"
+    type: "SELF"
+    actions:
+      - "RIGHT_CLICK_AIR"
+      - "RIGHT_CLICK_BLOCK"
+      - "LEFT_CLICK_AIR"
+      - "LEFT_CLICK_BLOCK"
+    effects:
+      - SPEED|4|7
+    cooldown: 30
+    particles:
+      enabled: true
+      type: "SOUL_FIRE_FLAME|100|1.5|1.5|1.5|3"
+    sound:
+      enabled: true
+      type: "BLOCK_BEACON_POWER_SELECT|1|1"
+  jump:
+    display_name: "<#57ff36>&lSALTO"
+    material: "FEATHER"
+    type: "SELF"
+    actions:
+      - "RIGHT_CLICK_AIR"
+      - "RIGHT_CLICK_BLOCK"
+      - "LEFT_CLICK_AIR"
+      - "LEFT_CLICK_BLOCK"
+    effects:
+      - JUMP|9|7
+    cooldown: "30"
+    particles:
+      enabled: true
+      type: "SPELL_WITCH|100|1.5|1.5|1.5|3"
+    sound:
+      enabled: true
+      type: "BLOCK_BEACON_POWER_SELECT|1|1"
+weapons:
+  backstab:
+    material: "GOLDEN_SWORD" # Solo la espada de oro por la espalda activara este efecto
+    type: "BACKSTAB"
+    break_item: true # Romper instantaneamente despues de ser usada
+    extra_damage: 8
+    attacked_effects:
+      - SLOW|1|3
+    attacker_effects:
+      - SLOW|3|3
+      - WEAKNESS|3|3
+    attacked_particles:
+      enabled: true
+      type: "SMALL_FLAME|100|1.5|1.5|1.5|3"
+    attacked_sound:
+      enabled: true
+      type: "BLOCK_BEACON_POWER_SELECT|1|1"
+    attacker_particles:
+      enabled: true
+      type: "SMALL_FLAME|100|1.5|1.5|1.5|3"
+    attacker_sound:
+      enabled: true
+      type: "BLOCK_BEACON_POWER_SELECT|1|1"

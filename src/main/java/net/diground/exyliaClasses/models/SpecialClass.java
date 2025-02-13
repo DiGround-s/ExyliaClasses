@@ -14,14 +14,13 @@ public class SpecialClass {
     private List<PotionEffect> passiveEffects;
     private Warmup warmup;
     private Map<String, Ability> abilities;
-    private Map<String, Weapon> weapons;
     private Map<String, HoldEffect> holdEffects;
     private Energy energy;
+    private Map<String, Weapon> weapons;
 
-    // Constructor
     public SpecialClass(String id, String displayName, String permission, Map<String, Material> equipment,
                   List<PotionEffect> passiveEffects, Warmup warmup,
-                  Map<String, Ability> abilities, Map<String, HoldEffect> holdEffects, Energy energy) { //, Map<String, Weapon> weapons
+                  Map<String, Ability> abilities, Map<String, HoldEffect> holdEffects, Energy energy, Map<String, Weapon> weapons) { //, Map<String, Weapon> weapons
         this.id = id;
         this.displayName = displayName;
         this.permission = permission;
@@ -31,7 +30,7 @@ public class SpecialClass {
         this.abilities = abilities;
         this.holdEffects = holdEffects;
         this.energy = energy;
-//        this.weapons = weapons;
+        this.weapons = weapons;
     }
 
     public String getId() {
@@ -90,14 +89,6 @@ public class SpecialClass {
         this.abilities = abilities;
     }
 
-    public Map<String, Weapon> getWeapons() {
-        return weapons;
-    }
-
-    public void setWeapons(Map<String, Weapon> weapons) {
-        this.weapons = weapons;
-    }
-
     public Map<String, HoldEffect> getHoldEffects() {
         return holdEffects;
     }
@@ -112,5 +103,13 @@ public class SpecialClass {
 
     public void setEnergy(Energy energy) {
         this.energy = energy;
+    }
+
+    public Map<String, Weapon> getWeapons() {
+        return weapons;
+    }
+
+    public void setWeapons(Map<String, Weapon> weapons) {
+        this.weapons = weapons;
     }
 }

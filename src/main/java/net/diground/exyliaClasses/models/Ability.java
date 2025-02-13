@@ -1,5 +1,7 @@
 package net.diground.exyliaClasses.models;
 
+import net.diground.exyliaClasses.models.utils.ParticleEffect;
+import net.diground.exyliaClasses.models.utils.SoundEffect;
 import org.bukkit.Material;
 import org.bukkit.potion.PotionEffect;
 

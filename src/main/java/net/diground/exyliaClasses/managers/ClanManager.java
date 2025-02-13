@@ -25,7 +25,6 @@ public class ClanManager {
         return combinedList;
     }
 
-
     public List<Player> getClanMembersInRadius(Player p, int radius) {
         UClans uClans = plugin.getUClans();
         if (uClans != null) {
@@ -37,8 +36,10 @@ public class ClanManager {
                 for (UUID memberUUID : clanData.getOnlineMembers()) {
                     Player member = Bukkit.getPlayer(memberUUID);
                     if (member != null && member.isOnline()) {
-                        if (member.getLocation().distance(p.getLocation()) <= radius) {
-                            nearbyMembers.add(member);
+                        if (member.getLocation().getWorld().equals(p.getLocation().getWorld())) {
+                            if (member.getLocation().distance(p.getLocation()) <= radius) {
+                                nearbyMembers.add(member);
+                            }
                         }
                     }
                 }
@@ -71,15 +72,18 @@ public class ClanManager {
             ClanData allyClan = allyOptionalClan.get();
             for (UUID memberUUID : allyClan.getOnlineMembers()) {
                 Player member = Bukkit.getPlayer(memberUUID);
-                if (member != null && member.isOnline() && member.getLocation().distance(p.getLocation()) <= radius) {
-                    nearbyMembers.add(member);
+                if (member != null && member.isOnline()) {
+                    if (member.getLocation().getWorld().equals(p.getLocation().getWorld())) {
+                        if (member.getLocation().distance(p.getLocation()) <= radius) {
+                            nearbyMembers.add(member);
+                        }
+                    }
                 }
             }
         }
 
         return nearbyMembers;
     }
-
 
     public List<Player> getEnemyMembersInRadius(Player p, int radius) {
         UClans uClans = plugin.getUClans();
@@ -90,8 +94,10 @@ public class ClanManager {
             List<Player> enemyPlayers = new ArrayList<>();
             for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
                 if (!clanMembers.contains(onlinePlayer.getUniqueId())) {
-                    if (onlinePlayer.getLocation().distance(p.getLocation()) <= radius) {
-                        enemyPlayers.add(onlinePlayer);
+                    if (onlinePlayer.getLocation().getWorld().equals(p.getLocation().getWorld())) {
+                        if (onlinePlayer.getLocation().distance(p.getLocation()) <= radius) {
+                            enemyPlayers.add(onlinePlayer);
+                        }
                     }
                 }
             }
@@ -99,6 +105,4 @@ public class ClanManager {
         }
         return new ArrayList<>();
     }
-
-
 }

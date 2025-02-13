@@ -3,7 +3,10 @@ package net.diground.exyliaClasses.loaders;
 import net.diground.exyliaClasses.ExyliaClasses;
 import net.diground.exyliaClasses.managers.SpecialClassManager;
 import net.diground.exyliaClasses.models.*;
-import org.bukkit.Bukkit;
+import net.diground.exyliaClasses.models.utils.ParticleEffect;
+import net.diground.exyliaClasses.models.utils.SoundEffect;
+import net.diground.exyliaClasses.models.weapons.BackstabWeapon;
+import net.diground.exyliaClasses.models.weapons.MarkWeapon;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -15,6 +18,8 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.io.File;
 import java.util.*;
+
+import static net.diground.exyliaClasses.loaders.WeaponLoader.loadWeapons;
 
 public class SpecialClassLoader {
     private final ExyliaClasses plugin;
@@ -62,20 +67,34 @@ public class SpecialClassLoader {
         Energy energy = loadEnergy(config);
 
         // cargar armas
-//        Map<String, Weapon> weapons = loadWeapons(config, "weapons", file);
+        Map<String, Weapon> weapons = loadWeapons(config);
+
+        for (Map.Entry<String, Weapon> entry : weapons.entrySet()) {
+            String name = entry.getKey();
+            Weapon weapon = entry.getValue();
+
+            plugin.getLogger().info("Weapon Name: " + name);
+            plugin.getLogger().info("Material: " + weapon.getMaterial());
+            plugin.getLogger().info("Type: " + weapon.getType());
+
+            // Si es una BackstabWeapon, mostramos su extraDamage
+            if (weapon instanceof BackstabWeapon backstabWeapon) {
+                plugin.getLogger().info("Extra Damage: " + backstabWeapon.getExtraDamage());
+                plugin.getLogger().info("Breaks Item: " + backstabWeapon.shouldBreakItem());
+            }
+
+            // Si es una MarkWeapon, mostramos su duración y marcas
+            if (weapon instanceof MarkWeapon markWeapon) {
+                plugin.getLogger().info("Mark Duration: " + markWeapon.getMarkDuration());
+                plugin.getLogger().info("Marks: " + markWeapon.getMarks().size());
+            }
+        }
+
 
         // Debugging
         plugin.getLogger().info("Clase cargada: " + id);
-        plugin.getLogger().info("Display Name: " + displayName);
-        plugin.getLogger().info("Permission: " + permission);
-        plugin.getLogger().info("Equipment: " + equipment);
-        plugin.getLogger().info("Pasive Effects: " + passiveEffects);
-        plugin.getLogger().info("Warmup cargado: " + warmup);
-        plugin.getLogger().info("Abilities cargadas: " + abilities);
-        SpecialClass specialClass = new SpecialClass(id, displayName, permission, equipment, passiveEffects, warmup, abilities, holdEffects, energy);
+        SpecialClass specialClass = new SpecialClass(id, displayName, permission, equipment, passiveEffects, warmup, abilities, holdEffects, energy, weapons);
         specialClassManager.getClassMap().put(id, specialClass);
-
-        plugin.getLogger().info("El item " + id + " se ha cargado correctamente.");
     }
 
     private Map<String, Material> loadEquipment(FileConfiguration config, File file) {
@@ -231,6 +250,7 @@ public class SpecialClassLoader {
             return new ParticleEffect(enabled, particle, quantity, offSetX, offSetY, offSetZ, speed);
         } catch (IllegalArgumentException e) {
             plugin.getLogger().warning("Partícula inválida en " + config + ": " + particleType);
+            plugin.getLogger().warning("Error: " + e.getMessage());
             return null;
         }
     }
