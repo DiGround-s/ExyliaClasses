@@ -1,13 +1,18 @@
 package net.diground.exyliaClasses;
 
 import me.ulrich.clans.interfaces.UClans;
+import net.diground.exyliaClasses.commands.MainCommand;
 import net.diground.exyliaClasses.listeners.*;
 import net.diground.exyliaClasses.loaders.SpecialClassLoader;
 import net.diground.exyliaClasses.managers.*;
+import net.diground.exyliaClasses.models.SpecialClass;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.Objects;
 
 public final class ExyliaClasses extends JavaPlugin {
 
@@ -38,6 +43,10 @@ public final class ExyliaClasses extends JavaPlugin {
         instance = this;
         loadManagers();
         loadListeners();
+        loadCommands();
+        for (Player p : getServer().getOnlinePlayers()) {
+            getSpecialClassManager().handleClassCheck(p);
+        }
     }
 
     @Override
@@ -45,6 +54,12 @@ public final class ExyliaClasses extends JavaPlugin {
         if(this.adventure != null) {
             this.adventure.close();
             this.adventure = null;
+        }
+        for (Player p : getServer().getOnlinePlayers()) {
+            SpecialClass currentClass = getPlayerInfoManager().getPlayerInfo(p).getCurrentClass();
+            if (currentClass != null) {
+                getSpecialClassManager().cancelClass(p, currentClass);
+            }
         }
     }
 
@@ -65,6 +80,12 @@ public final class ExyliaClasses extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new HoldEffectListener(this), this);
         getServer().getPluginManager().registerEvents(new MarkListener(this), this);
         getServer().getPluginManager().registerEvents(new BackstabListener(this), this);
+    }
+
+    private void loadCommands() {
+        MainCommand mainCommand = new MainCommand(this);
+        Objects.requireNonNull(getCommand("eclasses")).setExecutor(mainCommand);
+        Objects.requireNonNull(getCommand("eclasses")).setTabCompleter(mainCommand);
     }
 
     public SpecialClassLoader getSpecialClassLoader() { return specialClassLoader; }

@@ -30,6 +30,13 @@ public class SpecialClassLoader {
         this.specialClassManager = specialClassManager;
     }
 
+    public void reloadClasses() {
+        specialClassManager.clear();
+        loadClasses();
+        plugin.getLogger().info("Las clases especiales han sido recargadas correctamente.");
+    }
+
+
     public void loadClasses() {
         File itemsFolder = new File(plugin.getDataFolder(), "classes");
         if (!itemsFolder.exists()) {

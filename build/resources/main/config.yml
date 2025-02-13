@@ -1,0 +1,14 @@
+debug: false
+energy:
+  bossbar:
+    enabled: true
+    title: "<#ffc58f>Energía: %energy% ⚡"
+    color: YELLOW
+    style: NOTCHED_20
+weapons:
+  mark:
+    bossbar:
+      enabled: true
+      title: "%mark_color%&l %mark_icon%&r %mark_color%Estás marcado, recibes %extra_damage%% extra. &7&o(%remaining_time%s)"
+      color: RED
+      style: NOTCHED_20

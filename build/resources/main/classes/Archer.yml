@@ -1,0 +1,215 @@
+# Display name for placeholders
+display-name: "<#bf660d>&lARQUERO"
+
+# Permission to use this clase, if you dont need permission use NONE
+permission: "NONE"
+
+# The equipment necessary to activate the class and start the warmup time
+equipment:
+  helmet: "LEATHER_HELMET"
+  chestplate: "LEATHER_CHESTPLATE"
+  leggings: "LEATHER_LEGGINGS"
+  boots: "LEATHER_BOOTS"
+
+# Permanent effects that the class will have once it is active (after the warmup)
+pasive_effects:
+  - SPEED|3
+  - RESISTANCE|2
+
+# Warmup time, effects and sounds
+warmup:
+  time: 5
+  sound:
+    enabled: true
+    type: "BLOCK_AMETHYST_BLOCK_PLACE|1|1"
+  particle:
+    enabled: true
+    type: "BUBBLE_POP|100|1.5|1.5|1.5|3"
+  sound_completed:
+    enabled: true
+    type: "BLOCK_PISTON_EXTEND|1|1"
+  particle_completed:
+    enabled: true
+    type: "REVERSE_PORTAL|100|1.5|1.5|1.5|3"
+  sound_cancel:
+    enabled: true
+    type: "BLOCK_ANVIL_PLACE|1|1"
+  particle_cancel:
+    enabled: true
+    type: "DRIP_LAVA|100|1.5|1.5|1.5|3"
+
+# Special and unique abilities of the class
+abilities:
+  resistance:
+    # Display name for the ability
+    display_name: "<#ababab>&lRESISTENCIA"
+
+    # Material to need for activate effect
+    material: "IRON_INGOT"
+
+    #########################################################################
+    # SELF: Give the effect to the player himself                           #
+    # TO_CLAN: Give the effect to players in your clan                      #
+    # TO_ALLY: Give the effect to players in your allies                    #
+    # TO_CLAN_AND_ALLY: Give the effect to players in your clan and allies  #
+    # TO_ENEMY: Give the effect to enemies                                  #
+    #########################################################################
+    type: "SELF"
+
+    actions:
+      - "RIGHT_CLICK_AIR"
+      - "RIGHT_CLICK_BLOCK"
+      - "LEFT_CLICK_AIR"
+      - "LEFT_CLICK_BLOCK"
+
+
+    # Efect to add: EFFECT:AMPLIFIER:DURATION
+    effects:
+      - RESISTANCE|3|5
+
+    # Cooldown to use the same effect
+    cooldown: "30"
+
+    # Particles when activating the effect
+    particles:
+      enabled: true
+      type: "CAMPFIRE_COSY_SMOKE|100|1.5|1.5|1.5|3"
+
+    # Sound when activating the effect
+    sound:
+      enabled: true
+      type: "BLOCK_BEACON_POWER_SELECT|1|1"
+  speed:
+    display_name: "<#63fffa>&lVELOCIDAD"
+    material: "SUGAR"
+    type: "SELF"
+    actions:
+      - "RIGHT_CLICK_AIR"
+      - "RIGHT_CLICK_BLOCK"
+      - "LEFT_CLICK_AIR"
+      - "LEFT_CLICK_BLOCK"
+    effects:
+      - SPEED|4|7
+    cooldown: 30
+    particles:
+      enabled: true
+      type: "SOUL_FIRE_FLAME|100|1.5|1.5|1.5|3"
+    sound:
+      enabled: true
+      type: "BLOCK_BEACON_POWER_SELECT|1|1"
+  jump:
+    display_name: "<#57ff36>&lSALTO"
+    material: "FEATHER"
+    type: "SELF"
+    actions:
+      - "RIGHT_CLICK_AIR"
+      - "RIGHT_CLICK_BLOCK"
+      - "LEFT_CLICK_AIR"
+      - "LEFT_CLICK_BLOCK"
+    effects:
+      - JUMP|9|7
+    cooldown: "30"
+    particles:
+      enabled: true
+      type: "SPELL_WITCH|100|1.5|1.5|1.5|3"
+    sound:
+      enabled: true
+      type: "BLOCK_BEACON_POWER_SELECT|1|1"
+
+# Specials and unique weapons with ability
+weapons:
+  bow:
+    material: "ARROW" #Todas las flechas que se disparen de esta clase probocaran el efecto
+    type: "MARK"
+    mark_duration: 8.0
+    give_glow: true
+    can_mark_same_class: false
+    same_class_error_sound:
+      enabled: true
+      type: BLOCK_NOTE_BLOCK_BASS|1|1
+    marks:
+      one:
+        mark_number: 1
+        extra_damage: 7
+        color: "&a"
+        icon: "1"
+        attacked_effects:
+          - SLOW|1|1
+        attacker_effects:
+          - DOLPHINS_GRACE|3|3
+        attacked_particles:
+          enabled: true
+          type: "SPELL_WITCH|100|1.5|1.5|1.5|3"
+        attacked_sound:
+          enabled: true
+          type: "ENTITY_GOAT_HORN_BREAK|1|1"
+        attacker_particles:
+          enabled: true
+          type: "VILLAGER_HAPPY|100|1.5|1.5|1.5|3"
+        attacker_sound:
+          enabled: true
+          type: "ENTITY_GOAT_HORN_BREAK|1|1"
+      two:
+        mark_number: 2
+        extra_damage: 14
+        color: "&e"
+        icon: "2"
+        attacked_effects:
+          - SLOW|1|1
+        attacker_effects:
+          - DOLPHINS_GRACE|3|3
+        attacked_particles:
+          enabled: true
+          type: "SPELL_WITCH|100|1.5|1.5|1.5|3"
+        attacked_sound:
+          enabled: true
+          type: "ENTITY_GOAT_HORN_BREAK|1|1"
+        attacker_particles:
+          enabled: true
+          type: "VILLAGER_HAPPY|100|1.5|1.5|1.5|3"
+        attacker_sound:
+          enabled: true
+          type: "ENTITY_GOAT_HORN_BREAK|1|1"
+      three:
+        mark_number: 3
+        extra_damage: 21
+        color: "&c"
+        icon: "3"
+        attacked_effects:
+          - SLOW|1|1
+        attacker_effects:
+          - DOLPHINS_GRACE|3|3
+        attacked_particles:
+          enabled: true
+          type: "SPELL_WITCH|100|1.5|1.5|1.5|3"
+        attacked_sound:
+          enabled: true
+          type: "ENTITY_GOAT_HORN_BREAK|1|1"
+        attacker_particles:
+          enabled: true
+          type: "VILLAGER_HAPPY|100|1.5|1.5|1.5|3"
+        attacker_sound:
+          enabled: true
+          type: "ENTITY_GOAT_HORN_BREAK|1|1"
+      four:
+        remove_invisibility: true
+        mark_number: 4
+        extra_damage: 30
+        color: "&4"
+        icon: "4"
+        attacked_effects:
+          - SLOW|1|1
+        attacker_effects:
+          - DOLPHINS_GRACE|3|3
+        attacked_particles:
+          enabled: true
+          type: "SPELL_WITCH|100|1.5|1.5|1.5|3"
+        attacked_sound:
+          enabled: true
+          type: "ENTITY_GOAT_HORN_BREAK|1|1"
+        attacker_particles:
+          enabled: true
+          type: "VILLAGER_HAPPY|100|1.5|1.5|1.5|3"
+        attacker_sound:
+          enabled: true
+          type: "ENTITY_GOAT_HORN_BREAK|1|1"
