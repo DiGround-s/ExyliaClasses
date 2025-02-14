@@ -44,9 +44,11 @@ public class ClanManager {
                     }
                 }
                 return nearbyMembers;
+            } else {
+                return Collections.singletonList(p);
             }
         }
-        return new ArrayList<>();
+        return Collections.singletonList(p);
     }
 
     public List<Player> getAllyMembersInRadius(Player p, int radius) {

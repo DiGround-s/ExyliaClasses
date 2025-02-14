@@ -5,6 +5,8 @@ api-version: '1.18'
 authors: [ DiGround ]
 description: HCFClases PvP for new minecraft versions
 website: plugins.exylia.net/support
+softdepend:
+  - PlaceholderAPI
 commands:
   eclasses:
     description: "Comando principal para gestionar el Plugin"

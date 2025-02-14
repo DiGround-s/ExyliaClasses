@@ -177,11 +177,12 @@ public class SpecialClassLoader {
 
     private Energy loadEnergy(FileConfiguration config) {
         boolean enabled = config.getBoolean("energy.enabled", false);
+        String display = config.getString("energy.display", "%energy%");
         double maxEnergy = config.getDouble("energy.max_energy", 100.0);
         int regenDelay = config.getInt("energy.regen_delay", 1);
         double regenQuantity = config.getDouble("energy.regen_quantity", 0.1);
 
-        return new Energy(enabled, maxEnergy, regenDelay, regenQuantity);
+        return new Energy(enabled, display, maxEnergy, regenDelay, regenQuantity);
     }
 
 

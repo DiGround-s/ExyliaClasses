@@ -78,6 +78,7 @@ warmup:
 
 energy:
   enabled: true
+  display: "<#ffc58f> %energy%⚡&r"
   max_energy: 100
   regen_delay: 1
   regen_quantity: 0.1

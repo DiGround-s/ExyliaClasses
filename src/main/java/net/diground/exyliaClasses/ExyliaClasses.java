@@ -2,6 +2,7 @@ package net.diground.exyliaClasses;
 
 import me.ulrich.clans.interfaces.UClans;
 import net.diground.exyliaClasses.commands.MainCommand;
+import net.diground.exyliaClasses.extensions.PlaceholderAPI;
 import net.diground.exyliaClasses.listeners.*;
 import net.diground.exyliaClasses.loaders.SpecialClassLoader;
 import net.diground.exyliaClasses.managers.*;
@@ -64,6 +65,7 @@ public final class ExyliaClasses extends JavaPlugin {
     }
 
     private void loadManagers() {
+        new PlaceholderAPI(this).register();
         configManager = new ConfigManager(this);
         specialClassManager = new SpecialClassManager(this);
         specialClassLoader = new SpecialClassLoader(this, specialClassManager);
