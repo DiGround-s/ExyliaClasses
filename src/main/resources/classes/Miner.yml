@@ -32,7 +32,7 @@ warmup:
     type: "DRIP_LAVA|100|1.5|1.5|1.5|3"
 
 abilities:
-  strength:
+  haste:
     display_name: "<#ffdb63>&lVELOCIDAD MINERA"
     material: "IRON_INGOT"
     type: "SELF"
@@ -43,7 +43,7 @@ abilities:
       - "LEFT_CLICK_BLOCK"
     effects:
       - FAST_DIGGING|3|7
-    cooldown: "7"
+    cooldown: 30
     particles:
       enabled: true
       type: "ELECTRIC_SPARK|100|1.5|1.5|1.5|2"

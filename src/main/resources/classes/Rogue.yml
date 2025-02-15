@@ -43,7 +43,7 @@ abilities:
       - "LEFT_CLICK_BLOCK"
     effects:
       - RESISTANCE|3|5
-    cooldown: "30"
+    cooldown: 30
     particles:
       enabled: true
       type: "CAMPFIRE_COSY_SMOKE|100|1.5|1.5|1.5|3"
@@ -79,7 +79,7 @@ abilities:
       - "LEFT_CLICK_BLOCK"
     effects:
       - JUMP|9|7
-    cooldown: "30"
+    cooldown: 30
     particles:
       enabled: true
       type: "SPELL_WITCH|100|1.5|1.5|1.5|3"

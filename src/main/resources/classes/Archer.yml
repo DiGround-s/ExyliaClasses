@@ -68,7 +68,7 @@ abilities:
       - RESISTANCE|3|5
 
     # Cooldown to use the same effect
-    cooldown: "30"
+    cooldown: 30
 
     # Particles when activating the effect
     particles:
@@ -108,7 +108,7 @@ abilities:
       - "LEFT_CLICK_BLOCK"
     effects:
       - JUMP|9|7
-    cooldown: "30"
+    cooldown: 30
     particles:
       enabled: true
       type: "SPELL_WITCH|100|1.5|1.5|1.5|3"

@@ -40,7 +40,6 @@ hold_effects:
     radius: 25
     effects:
       - REGENERATION|1|5
-    cooldown: "7"
   fire_resistance:
     material: "MAGMA_CREAM"
     type: "TO_CLAN_AND_ALLY"
@@ -97,7 +96,7 @@ abilities:
       - "LEFT_CLICK_BLOCK"
     effects:
       - INCREASE_DAMAGE|3|5
-    cooldown: "7"
+    cooldown: 7
     particles:
       enabled: true
       type: "ELECTRIC_SPARK|100|1.5|1.5|1.5|2"
@@ -117,7 +116,7 @@ abilities:
       - "LEFT_CLICK_BLOCK"
     effects:
       - SPEED|3|5
-    cooldown: "7"
+    cooldown: 7
     particles:
       enabled: true
       type: "SOUL_FIRE_FLAME|100|1.5|1.5|1.5|2"
@@ -137,7 +136,7 @@ abilities:
       - "LEFT_CLICK_BLOCK"
     effects:
       - DAMAGE_RESISTANCE|3|5
-    cooldown: "7"
+    cooldown: 7
     particles:
       enabled: true
       type: "CAMPFIRE_COSY_SMOKE|100|1.5|1.5|1.5|2"
@@ -157,7 +156,7 @@ abilities:
       - "LEFT_CLICK_BLOCK"
     effects:
       - JUMP|5|5
-    cooldown: "7"
+    cooldown: 7
     particles:
       enabled: true
       type: "SPELL_WITCH|100|1.5|1.5|1.5|2"
@@ -177,7 +176,7 @@ abilities:
       - "LEFT_CLICK_BLOCK"
     effects:
       - REGENERATION|2|5
-    cooldown: "7"
+    cooldown: 7
     particles:
       enabled: true
       type: "REVERSE_PORTAL|100|1.5|1.5|1.5|2"
@@ -197,7 +196,7 @@ abilities:
       - "LEFT_CLICK_BLOCK"
     effects:
       - FIRE_RESISTANCE|1|40
-    cooldown: "7"
+    cooldown: 7
     particles:
       enabled: true
       type: "DRIP_LAVA|100|1.5|1.5|1.5|2"
@@ -217,7 +216,7 @@ abilities:
       - "LEFT_CLICK_BLOCK"
     effects:
       - INVISIBILITY|1|40
-    cooldown: "7"
+    cooldown: 7
     particles:
       enabled: true
       type: "ENCHANTMENT_TABLE|100|1.5|1.5|1.5|2"
@@ -237,7 +236,7 @@ abilities:
       - "LEFT_CLICK_BLOCK"
     effects:
       - SATURATION|3|5
-    cooldown: "7"
+    cooldown: 7
     particles:
       enabled: true
       type: "FIREWORKS_SPARK|100|1.5|1.5|1.5|2"
