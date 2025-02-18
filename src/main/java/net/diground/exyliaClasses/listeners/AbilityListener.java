@@ -57,6 +57,9 @@ public class AbilityListener implements Listener {
 
             ColorUtils.sendPlayerMessage(player, plugin.getConfigManager().getMessage("abilities.used", "%prefix% <#8fffc1>¡Haz utilizado la habilidad %ability_display_name%&r<#8fffc1>!")
                     .replace("%ability_display_name%", ability.getDisplayName()));
+
+            player.getInventory().removeItem(new ItemStack(ability.getMaterial(), 1));
+
             switch (ability.getType()) {
                 case "SELF":
                     applyEffects(player, ability);
