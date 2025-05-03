@@ -19,15 +19,25 @@ public class ArmorListener implements Listener {
     @EventHandler
     private void onArmorEquip(PlayerArmorChangeEvent event) {
         if (event.getOldItem() != null && event.getNewItem() != null) {
-            if (event.getOldItem().getType() == event.getNewItem().getType() &&
-                    event.getOldItem().getItemMeta().hasCustomModelData() == event.getNewItem().getItemMeta().hasCustomModelData()) {
-                return;
+            if (event.getOldItem().getType() == event.getNewItem().getType()) {
+                boolean oldHasModel = event.getOldItem().hasItemMeta()
+                        && event.getOldItem().getItemMeta() != null
+                        && event.getOldItem().getItemMeta().hasCustomModelData();
+
+                boolean newHasModel = event.getNewItem().hasItemMeta()
+                        && event.getNewItem().getItemMeta() != null
+                        && event.getNewItem().getItemMeta().hasCustomModelData();
+
+                if (oldHasModel == newHasModel) {
+                    return;
+                }
             }
         }
 
         Player player = event.getPlayer();
         plugin.getSpecialClassManager().handleClassCheck(player);
     }
+
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {

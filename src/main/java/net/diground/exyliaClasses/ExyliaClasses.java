@@ -40,7 +40,13 @@ public final class ExyliaClasses extends JavaPlugin {
     }
     @Override
     public void onEnable() {
-        this.adventure = BukkitAudiences.create(this);
+        try {
+            this.adventure = BukkitAudiences.create(this);
+        } catch (Exception e) {
+            getLogger().severe("Error inicializando Adventure: " + e.getMessage());
+            getPluginLoader().disablePlugin(this);
+        }
+
         instance = this;
         loadManagers();
         loadListeners();
